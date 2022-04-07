@@ -5,9 +5,9 @@ app.component('product-display', {
       required: true
     }
   },
-  template: 
-  /*html*/
-  `<div class="product-display">
+  template:
+    /*html*/
+    `<div class="product-display">
     <div class="product-container">
       <div class="product-image">
         <img v-bind:src="image">
@@ -40,43 +40,59 @@ app.component('product-display', {
         </button>
 
       </div>
-    </div>
+      </div>
+
+      <review-list :reviews="reviews" v-if="reviews.length"></review-list>
+      <review-form @review-submitted="addReview"></review-form>
   </div>`,
   data() {
     return {
-        product: 'Socks',
-        brand: 'Vue Mastery',
-        selectedVariant: 0,
-        details: ['50% cotton', '30% wool', '20% polyester'],
-        variants: [
-          { id: 2234, color: 'green', image: './assets/images/socks_green.jpg', quantity: 50 },
-          { id: 2235, color: 'blue', image: './assets/images/socks_blue.jpg', quantity: 0 },
-        ]
+      product: 'Socks',
+      brand: 'Vue Mastery',
+      selectedVariant: 0,
+      details: ['50% cotton', '30% wool', '20% polyester'],
+      variants: [{
+          id: 2234,
+          color: 'green',
+          image: './assets/images/socks_green.jpg',
+          quantity: 50
+        },
+        {
+          id: 2235,
+          color: 'blue',
+          image: './assets/images/socks_blue.jpg',
+          quantity: 0
+        },
+      ],
+      reviews: [],
     }
   },
   methods: {
-      addToCart() {
-          this.$emit('add-to-cart', this.variants[this.selectedVariant].id)
-      },
-      updateVariant(index) {
-          this.selectedVariant = index
-      }
+    addToCart() {
+      this.$emit('add-to-cart', this.variants[this.selectedVariant].id)
+    },
+    updateVariant(index) {
+      this.selectedVariant = index
+    },
+    addReview(review) {
+      this.reviews.push(review);
+    }
   },
   computed: {
-      title() {
-          return this.brand + ' ' + this.product
-      },
-      image() {
-          return this.variants[this.selectedVariant].image
-      },
-      inStock() {
-          return this.variants[this.selectedVariant].quantity
-      },
-      shipping() {
-        if (this.premium) {
-          return 'Free'
-        }
-        return 2.99
+    title() {
+      return this.brand + ' ' + this.product
+    },
+    image() {
+      return this.variants[this.selectedVariant].image
+    },
+    inStock() {
+      return this.variants[this.selectedVariant].quantity
+    },
+    shipping() {
+      if (this.premium) {
+        return 'Free'
       }
+      return 2.99
+    }
   }
 })
